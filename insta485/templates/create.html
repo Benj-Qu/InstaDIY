@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<title>insta485</title>
+
+<body>
+    <div>
+        <a href="/">Home Page</a>
+    </div>
+    <div>
+        <a href="/accounts/login/">login</a>
+    </div>
+
+    <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
+        <label for="file">Photo</label>
+        <input type="file" id="file" name="file" required /><br>
+        <label for="fullname">Name</label>
+        <input type="text" id="fullname" name="fullname" required /><br>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required /><br>
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" required /><br>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required /><br>
+        <input type="submit" name="signup" value="sign up" /><br>
+        <input type="hidden" name="operation" value="create" /><br>
+    </form>
+
+    <div>
+        Have an account? <a href="/accounts/login/">Log in</a>
+    </div>
+
+</body>
+
+</html>

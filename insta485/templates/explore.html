@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<title>insta485</title>
+
+<body>
+    <div>
+        <a href="/">Home Page</a>
+    </div>
+    <div>
+        <a href="/explore/">Explore</a>
+        <a href="/users/{{logname}}/">{{logname}}</a>
+    </div>
+
+    <div>
+        Discover People
+    </div>
+
+    <ul>
+        {% for follow in not_following %}
+        <li>
+            <div>
+                <img src="/uploads/{{follow.user_img_url}}" alt="{{follow.username}}">
+            </div>
+
+            <div>
+                <a href="/users/{{follow.username}}/">
+                    {{follow.username}}
+                </a>
+            </div>
+
+            <form action="/following/?target=/explore/" method="post" enctype="multipart/form-data">
+                <input type="submit" name="follow" value="follow" />
+                <input type="hidden" name="username" value="{{follow.username}}" />
+                <input type="hidden" name="operation" value="follow" />
+            </form>
+
+        </li>
+        {% endfor %}
+
+    </ul>
+
+</body>
+
+</html>
