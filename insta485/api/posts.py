@@ -9,7 +9,12 @@ def get_posts_without_size():
     if flask.request.authorization:
         username = flask.request.authorization['username']
         password = flask.request.authorization['password']
-    context = get_posts(username)
+
+    context = {
+        "next": "",
+        "results": get_posts(username),
+        "url": "/api/v1/posts/"
+    }
     
     return flask.jsonify(**context)
 
@@ -45,7 +50,7 @@ def get_posts(usr, n = 10):
 
     # posts of the user
     cur = connection.execute(
-        "SELECT postid"
+        "SELECT postid "
         "FROM posts "
         "WHERE owner = ? ",
         (usr, )
@@ -54,7 +59,7 @@ def get_posts(usr, n = 10):
 
     # posts of following users
     cur = connection.execute(
-        "SELECT username1, username2 "
+        "SELECT username2 "
         "FROM following "
         "WHERE username1 = ? ",
         (usr, )
@@ -63,25 +68,14 @@ def get_posts(usr, n = 10):
 
     for following in following_list:
         cur = connection.execute(
-            "SELECT postid, filename AS img_url, owner, created AS timestamp "
+            "SELECT postid "
             "FROM posts "
             "WHERE owner = ? ",
-            (following["username2"], )
+            (following, )
         )
         posts += cur.fetchall()
-    
-    # fix timestamp
-    for i, _ in enumerate(posts):
-        posts[i]["timestamp"] = \
-            arrow.get(posts[i]["timestamp"]).humanize()
 
     # sort by postid
     posts.sort(key=lambda d: d['postid'], reverse=True)
-    
-    context = {
-        "next": "",
-        "results": posts[:n],
-        "url": "/api/v1/posts/"
-    }
-    context["next"] = "" 
-    context["results"] = get_posts(username)
+
+    return [ {"postid": post, "url": "/api/v1/posts/{}/".format(post)} for post in posts[:n]]
