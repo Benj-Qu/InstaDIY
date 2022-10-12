@@ -120,7 +120,6 @@ def op_login():
     if len(password_list) == 0:
         flask.abort(403)
     algorithm = 'sha512'
-    # salt = uuid.uuid4().hex
     salt = password_list[0]["password"].split('$')[1]
     hash_obj = hashlib.new(algorithm)
     password_salted = salt + pwd

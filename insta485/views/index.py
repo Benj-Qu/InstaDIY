@@ -23,7 +23,6 @@ def show_index():
     context = {}
     connection = insta485.model.get_db()
     context["logname"] = flask.session["username"]
-    # context["logname"] = 'awdeorio'
 
     # logged in user posts information
     cur = connection.execute(
@@ -74,7 +73,6 @@ def show_index():
         context["posts"][i]["likes"] = 0
         context["posts"][i]["ifliked"] = \
             has_liked(context["logname"], context["posts"][i]["postid"])
-        # print(context["posts"][i]["ifliked"])
         for like in like_list:
             if like["postid"] == context["posts"][i]["postid"]:
                 context["posts"][i]["likes"] += 1
@@ -109,7 +107,6 @@ def find_file(filename):
     """Find file."""
     path = str(insta485.app.config['UPLOAD_FOLDER']) + '/' + filename
     if not os.path.exists(path):
-        # print("1111111111")
         flask.abort(404)
     return flask.send_from_directory(insta485.app.config['UPLOAD_FOLDER'],
                                      filename, as_attachment=True)
