@@ -47,7 +47,7 @@ case $1 in
         SHUF=shuf
         # If shuf is not on this machine, try to use gshuf instead
         if ! type shuf 2> /dev/null; then
-        SHUF=gshuf
+            SHUF=gshuf
         fi
         DB_FILENAME=var/insta485.sqlite3
         FILENAMES="122a7d27ca1d7420a1072f695d9290fad4501a41.jpg
@@ -59,9 +59,9 @@ case $1 in
         # shuf -n1             select one random line from multiline input
         # awk '{$1=$1;print}'  trim leading and trailing whitespace
         # Use '${SHUF}' instead of 'shuf'
-        FILENAME=`echo "$FILENAMES" | ${SHUF} -n1 | awk '{$1=$1;print}'`
-        OWNER="awdeorio"
-        sqlite3 -echo -batch ${DB_FILENAME} "INSERT INTO posts(filename, owner) VALUES('${FILENAME}','${OWNER}');"
+            FILENAME=`echo "$FILENAMES" | ${SHUF} -n1 | awk '{$1=$1;print}'`
+            OWNER="awdeorio"
+            sqlite3 -echo -batch ${DB_FILENAME} "INSERT INTO posts(filename, owner) VALUES('${FILENAME}','${OWNER}');"
         done
         ;;
     *)
