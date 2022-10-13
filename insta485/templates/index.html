@@ -12,7 +12,7 @@
         <a href="/users/{{logname}}/">{{logname}}</a>
     </div>
 
-    <ul>
+    <!-- <ul>
         {% for post in posts %}
         <li>
             <div>
@@ -57,13 +57,13 @@
             <form action="/comments/?target=/" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="operation" value="create" />
                 <input type="hidden" name="postid" value="{{post.postid}}" />
-                <input type="text" name="text" required />
+                <input type="text" name="text" value="" required />
                 <input type="submit" name="comment" value="comment" />
             </form>
         </li>
         {% endfor %}
 
-    </ul>
+    </ul> -->
 
     <!-- Plain old HTML and jinja2 nav bar goes here -->
     <div id="reactEntry">

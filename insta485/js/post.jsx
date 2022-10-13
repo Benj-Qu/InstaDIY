@@ -7,7 +7,10 @@ class Post extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { imgUrl: "", owner: "" };
+    this.state = {
+      imgUrl: "",
+      owner: ""
+    };
   }
 
   componentDidMount() {
