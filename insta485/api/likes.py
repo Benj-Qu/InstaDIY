@@ -9,7 +9,9 @@ def show_like(postid):
     connection = insta485.model.get_db()
     username, has_error, error_code = check_authorization()
     if has_error:
-        return "", 403
+        return flask.jsonify({}), error_code
+    
+
 
     
     # likeid = 
