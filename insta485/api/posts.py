@@ -4,11 +4,14 @@ import insta485
 import hashlib
 import arrow
 import math
+from insta485.api.utils import check_authorization
 
 @insta485.app.route('/api/v1/posts/')
 def get_posts():
     
-    username = "awdeorio"
+    username, has_error, error_code = check_authorization()
+    if has_error:
+        return flask.jsonify({}), error_code
 
     postid_lte = flask.request.args.get("postid_lte", default=-1, type=int)
     size = flask.request.args.get("size", default=10, type=int)
@@ -19,8 +22,8 @@ def get_posts():
     cur = connection.execute(
         "SELECT postid "
         "FROM posts "
-        "WHERE owner = ?  OR owner IN",
-        "SELECT username2 FROM following WHERE username1 = ? "
+        "WHERE (owner = ? ) OR (owner IN",
+        "(SELECT username2 FROM following WHERE username1 = ? )) "
         "ORDER BY postid DESC"
         (username, username)
     )
