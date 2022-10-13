@@ -7,21 +7,44 @@ class Like extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = {};
+    this.state = {
+      has_liked: false,
+      num_likes: 0
+    };
   }
 
   handleClick() {
     // const hasLiked = this.state.hasLiked;
-    const { hasLiked } = this.props;
+    const { url, hasLiked, numLikes } = this.props;
+    this.setState({
+      has_liked: hasLiked,
+      num_likes: numLikes
+    })
+
     if (hasLiked === false)
     {
-      this.props.hasLiked = true;
-      this.props.numLikes += 1;
+      this.state.has_liked = true;
+      this.state.num_likes += 1;
+      
+      fetch(url, { credentials: "same-origin", method: "POST" })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .catch((error) => console.log(error));
+
     }
-    else
+    if (hasLiked === true)
     {
-      this.props.hasLiked = false;
-      this.props.numLikes -= 1;
+      this.state.has_liked = false;
+      this.state.num_likes -= 1;
+
+      fetch(url, { credentials: "same-origin", method: "DELETE" })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .catch((error) => console.log(error));
     }
   }
 
