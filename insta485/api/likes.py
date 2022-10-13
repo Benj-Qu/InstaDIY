@@ -7,14 +7,15 @@ from insta485.api.db_operations import *
 @insta485.app.route('/api/v1/likes/', methods=["POST"])
 def create_like():
     postid = flask.request.args.get('postid')
-    if postid_in_range(postid) == False:
-        # if postid is not in range
-        # return 404
-        return flask.jsonify({}), 404
 
     username, has_error, error_code = check_authorization()
     if has_error:
         return flask.jsonify({}), error_code
+
+    if postid_in_range(postid) == False:
+        # if postid is not in range
+        # return 404
+        return flask.jsonify({}), 404
 
     if has_liked(username, postid):
         likeid = get_likeid(username, postid)
@@ -46,5 +47,16 @@ def delete_like(likeid):
     # If the user does not own the like, return 403.
     username, has_error, error_code = check_authorization()
     if has_error:
+        # 403
         return flask.jsonify({}), error_code
-
+    if likeid_exists(likeid) == False:
+        return flask.jsonify({}), 404
+    if own_like(username, likeid) == False:
+        return flask.jsonify({}), 403
+    connection = insta485.model.get_db()
+    connection.execute(
+        "DELETE FROM likes WHERE likeid = ? ",
+        (likeid)
+    )
+    connection.commit()
+    return flask.jsonify({}), 204

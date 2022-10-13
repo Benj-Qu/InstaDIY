@@ -27,3 +27,34 @@ def get_likeid(username, postid):
     results = cur.fetchone()
     return results["likeid"]
 
+
+def likeid_exists(likeid):
+    """
+    Return True if likeid exists
+    else return False
+    """
+    connection = insta485.model.get_db()
+    cur = connection.execute(
+        "SELECT * "
+        "FROM likes "
+        "WHERE likeid = ?",
+        (likeid)
+    )
+    return len(cur.fetchall()) != 0
+
+
+def own_like(username, likeid):
+    """
+    Return True if username own the like
+    else return False
+    """
+    connection = insta485.model.get_db()
+    cur = connection.execute(
+        "SELECT * "
+        "FROM likes "
+        "WHERE likeid = ?",
+        (likeid)
+    )
+    results = cur.fetchone()
+    owner = results["owner"]
+    return owner == username
