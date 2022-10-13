@@ -8,7 +8,7 @@ class Comment extends React.Component {
         this.state = {
             text: "",
             comments: [],
-            commentsUrl: "", 
+            commentsUrl: "",
         }
     }
 

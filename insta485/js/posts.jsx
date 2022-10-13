@@ -8,7 +8,7 @@ class Posts extends React.Component {
         super(props);
         this.state = {
             next: "",
-            posts: []
+            posts: [],
         };
     }
 

@@ -15,11 +15,11 @@ class Like extends React.Component {
 
   componentDidMount() {
     // This line automatically assigns this.props.url to the const variable url
-    const { hasLiked, numLikes } = this.props;
+    const { likes } = this.props;
     // Call REST API to get the post's information
     this.setState({
-      has_liked: hasLiked,
-      num_likes: numLikes
+      has_liked: likes.hasLiked,
+      num_likes: likes.numLikes
     })
   }
 
@@ -31,30 +31,28 @@ class Like extends React.Component {
       num_likes: numLikes
     })
 
-    if (hasLiked === false)
-    {
+    if (hasLiked === false) {
       this.state.has_liked = true;
       this.state.num_likes += 1;
 
       fetch(url, { credentials: "same-origin", method: "POST" })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .catch((error) => console.log(error));
+        .then((response) => {
+          if (!response.ok) throw Error(response.statusText);
+          return response.json();
+        })
+        .catch((error) => console.log(error));
 
     }
-    if (hasLiked === true)
-    {
+    if (hasLiked === true) {
       this.state.has_liked = false;
       this.state.num_likes -= 1;
 
       fetch(url, { credentials: "same-origin", method: "DELETE" })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .catch((error) => console.log(error));
+        .then((response) => {
+          if (!response.ok) throw Error(response.statusText);
+          return response.json();
+        })
+        .catch((error) => console.log(error));
     }
   }
 
@@ -66,18 +64,18 @@ class Like extends React.Component {
     return (
       <div>
         <div>
-          <button 
+          <button
             type='button'
-            className="like-unlike-button" 
+            className="like-unlike-button"
             onClick={() => this.handleClick()}
           >
-            {hasLiked? "unlike" : ""}
+            {hasLiked ? "unlike" : ""}
           </button>
         </div>
         <div>
           {numLikes}
           {" "}
-          {numLikes === 1? "like" : "likes"}
+          {numLikes === 1 ? "like" : "likes"}
         </div>
       </div>
     );
@@ -85,9 +83,7 @@ class Like extends React.Component {
 }
 
 Like.propTypes = {
-  url: PropTypes.string.isRequired,
-  hasLiked: PropTypes.bool.isRequired,
-  numLikes: PropTypes.number.isRequired
+  likes: PropTypes.object.isRequired,
 };
 
 export default Like;
