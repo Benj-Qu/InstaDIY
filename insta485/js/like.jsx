@@ -25,17 +25,17 @@ class Like extends React.Component {
 
   handleClick() {
     // const hasLiked = this.state.hasLiked;
-    const { url, hasLiked, numLikes } = this.props;
+    const { likes } = this.props;
     this.setState({
-      has_liked: hasLiked,
-      num_likes: numLikes
+      has_liked: likes.hasLiked,
+      num_likes: likes.numLikes
     })
 
-    if (hasLiked === false) {
+    if (likes.hasLiked === false) {
       this.state.has_liked = true;
       this.state.num_likes += 1;
 
-      fetch(url, { credentials: "same-origin", method: "POST" })
+      fetch(likes.url, { credentials: "same-origin", method: "POST" })
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
           return response.json();
@@ -43,11 +43,11 @@ class Like extends React.Component {
         .catch((error) => console.log(error));
 
     }
-    if (hasLiked === true) {
+    if (likes.hasLiked === true) {
       this.state.has_liked = false;
       this.state.num_likes -= 1;
 
-      fetch(url, { credentials: "same-origin", method: "DELETE" })
+      fetch(likes.url, { credentials: "same-origin", method: "DELETE" })
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
           return response.json();
@@ -59,7 +59,7 @@ class Like extends React.Component {
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
-    const { hasLiked, numLikes } = this.props;
+    const { likes } = this.props;
     // Render post image and post owner
     return (
       <div>
@@ -69,13 +69,13 @@ class Like extends React.Component {
             className="like-unlike-button"
             onClick={() => this.handleClick()}
           >
-            {hasLiked ? "unlike" : ""}
+            {likes.hasLiked ? "unlike" : ""}
           </button>
         </div>
         <div>
-          {numLikes}
+          {likes.numLikes}
           {" "}
-          {numLikes === 1 ? "like" : "likes"}
+          {likes.numLikes === 1 ? "like" : "likes"}
         </div>
       </div>
     );
@@ -83,7 +83,7 @@ class Like extends React.Component {
 }
 
 Like.propTypes = {
-  likes: PropTypes.object.isRequired,
+  likes: PropTypes.objectOf(PropTypes.bool, PropTypes.number, PropTypes.string).isRequired,
 };
 
 export default Like;
