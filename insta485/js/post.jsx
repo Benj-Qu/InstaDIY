@@ -2,13 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import Like from "./like";
+import Comment from "./comment";
 
 class Post extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       comments: {},
-      comments_url: "",
+      commentsUrl: "",
       created: "",
       imgUrl: "",
       likes: "",
@@ -16,7 +17,6 @@ class Post extends React.Component {
       ownerImgUrl: "",
       ownerShowUrl: "",
       postShowUrl: "",
-      postid: -1
     };
   }
 
@@ -30,7 +30,7 @@ class Post extends React.Component {
       .then((data) => {
         this.setState({
           comments: data.comments,
-          comments_url: data.comments_url,
+          commentsUrl: data.comments_url,
           created: data.created,
           imgUrl: data.imgUrl,
           likes: data.likes,
@@ -38,22 +38,21 @@ class Post extends React.Component {
           ownerImgUrl: data.ownerImgUrl,
           ownerShowUrl: data.ownerShowUrl,
           postShowUrl: data.postShowUrl,
-          postid: data.postid
         });
       })
       .catch((error) => console.log(error));
   }
 
   render() {
-    const { comments, comments_url, created, imgUrl,
+    const { comments, commentsUrl, created, imgUrl,
       likes, owner, ownerImgUrl, ownerShowUrl,
-      postShowUrl, postid } = this.state;
-    const { timestamp } = created.now();
+      postShowUrl } = this.state;
+    const { timestamp } = moment(created).fromNow();
     return (
       <div>
         <div>
           <a href={ownerShowUrl}>
-            <img src={ownerimgurl} alt={owner} />
+            <img src={ownerImgUrl} alt={ownerImgUrl} />
             <div> {owner} </div>
           </a>
         </div>
@@ -64,6 +63,7 @@ class Post extends React.Component {
           <img src={imgUrl} alt={imgUrl} />
         </div>
         <Like likes={likes} />
+        <Comment comments={comments} comments_url={commentsUrl} />
       </div>
     );
   }
