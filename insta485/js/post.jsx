@@ -63,7 +63,7 @@ class Post extends React.Component {
           <img src={imgUrl} alt={imgUrl} />
         </div>
         <Like likes={likes} />
-        <Comment comments={comments} comments_url={commentsUrl} />
+        <Comment comments={comments} commentsUrl={commentsUrl} />
       </div>
     );
   }
