@@ -11,7 +11,7 @@ def check_authorization():
         username = flask.session["username"]
         return username, False, None
 
-    if flask.reques.authorization:
+    if flask.request.authorization:
         # HTTP Basic Access Authentication should work. 
         # This is true for every route with the exception of /api/v1/.
         username = flask.request.authorization['username'] 
