@@ -18,8 +18,8 @@ class Comment extends React.Component {
         const { comments, commentsUrl } = this.props;
         // Call REST API to get the post's information
         this.setState({
-            comments: comments,
-            commentsUrl: commentsUrl
+            comments,
+            commentsUrl
         });
     }
 
