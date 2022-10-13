@@ -21,7 +21,7 @@ def create_like():
         likeid = get_likeid(username, postid)
         context = {
             "likeid": likeid,
-            "url": "/api/v1/likes/{likeid}/".format(likeid)
+            "url": "/api/v1/likes/{}/".format(likeid)
         }
         return flask.jsonify(**context), 200
     else:
@@ -35,7 +35,7 @@ def create_like():
         likeid = get_likeid(username, postid)
         context = {
             "likeid": likeid,
-            "url": "/api/v1/likes/{likeid}/".format(likeid)
+            "url": "/api/v1/likes/{}/".format(likeid)
         }
         return flask.jsonify(**context), 201
 
