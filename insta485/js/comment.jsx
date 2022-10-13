@@ -15,11 +15,11 @@ class Comment extends React.Component {
 
     componentDidMount() {
         // This line automatically assigns this.props.url to the const variable url
-        const { commentsList, url } = this.props;
+        const { comments, commentsUrl } = this.props;
         // Call REST API to get the post's information
         this.setState({
-            comments: commentsList,
-            commentsUrl: url
+            comments: comments,
+            commentsUrl: commentsUrl
         });
     }
 
@@ -108,7 +108,7 @@ class Comment extends React.Component {
     }
 }
 Comment.propTypes = {
-    url: PropTypes.string.isRequired,
-    commentsList: PropTypes.arrayOf(Object).isRequired,
+    commentsUrl: PropTypes.string.isRequired,
+    comments: PropTypes.arrayOf(Object).isRequired,
 };
 export default Comment;
