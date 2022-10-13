@@ -4,10 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Post from "./post";
 
 class Posts extends React.Component {
-    /* Display image and post owner of a single post
-     */
     constructor(props) {
-        // Initialize mutable state
         super(props);
         this.state = {
             next: "",
@@ -16,9 +13,7 @@ class Posts extends React.Component {
     }
 
     componentDidMount() {
-        // This line automatically assigns this.props.url to the const variable url
         const { url } = this.props;
-        // Call REST API to get the post's information
         fetch(url, { credentials: "same-origin" })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
@@ -34,28 +29,23 @@ class Posts extends React.Component {
     }
 
     extend() {
-        // This line automatically assigns this.props.url to the const variable url
-        const { posts, next } = this.state;
-        // Call REST API to get the post's information
+        const { next } = this.state;
         fetch(next, { credentials: "same-origin" })
             .then((response) => {
                 if (!response.ok) throw Error(response.statusText);
                 return response.json();
             })
             .then((data) => {
-                this.setState({
+                this.setState(prevState => ({
                     next: data.next,
-                    posts: [...posts, ...data.posts],
-                });
+                    posts: [...prevState.posts, ...data.posts],
+                }));
             })
             .catch((error) => console.log(error));
     }
 
     render() {
-        // This line automatically assigns this.state.imgUrl to the const variable imgUrl
-        // and this.state.owner to the const variable owner
         const { next, posts } = this.state;
-        // Render post image and post owner
         return (
             <InfiniteScroll
                 dataLength={posts.length}

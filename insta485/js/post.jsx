@@ -2,21 +2,24 @@ import React from "react";
 import PropTypes from "prop-types";
 
 class Post extends React.Component {
-  /* Display image and post owner of a single post
-   */
   constructor(props) {
-    // Initialize mutable state
     super(props);
     this.state = {
+      comments: {},
+      comments_url: "",
+      created: "",
       imgUrl: "",
-      owner: ""
+      likes: "",
+      owner: "",
+      ownerImgUrl: "",
+      ownerShowUrl: "",
+      postShowUrl: "",
+      postid: -1
     };
   }
 
   componentDidMount() {
-    // This line automatically assigns this.props.url to the const variable url
     const { url } = this.props;
-    // Call REST API to get the post's information
     fetch(url, { credentials: "same-origin" })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
@@ -24,22 +27,33 @@ class Post extends React.Component {
       })
       .then((data) => {
         this.setState({
+          comments: data.comments,
+          comments_url: data.comments_url,
+          created: data.created,
           imgUrl: data.imgUrl,
+          likes: data.likes,
           owner: data.owner,
+          ownerImgUrl: data.ownerImgUrl,
+          ownerShowUrl: data.ownerShowUrl,
+          postShowUrl: data.postShowUrl,
+          postid: data.postid
         });
       })
       .catch((error) => console.log(error));
   }
 
   render() {
-    // This line automatically assigns this.state.imgUrl to the const variable imgUrl
-    // and this.state.owner to the const variable owner
-    const { imgUrl, owner } = this.state;
+    const { comments, comments_url, created, imgUrl,
+      likes, owner, ownerImgUrl, ownerShowUrl,
+      postShowUrl, postid } = this.state;
+    let owner_img_url = "/uploads/{}".format(ownerImgUrl);
     // Render post image and post owner
     return (
-      <div className="post">
-        <img src={imgUrl} alt="post_image" />
-        <p>{owner}</p>
+      <div>
+        <a href="/users/{owner}/">
+          <img src={owner_img_url} alt={owner} />
+          <div> {owner} </div>
+        </a>
       </div>
     );
   }
