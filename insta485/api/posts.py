@@ -1,9 +1,9 @@
 """REST API for posts."""
+import math
 import flask
 import insta485
 import hashlib
 import arrow
-import math
 from insta485.api.utils import check_authorization
 
 @insta485.app.route('/api/v1/posts/')
@@ -17,22 +17,34 @@ def get_posts():
     size = flask.request.args.get("size", default=10, type=int)
     page = flask.request.args.get("page", default=1, type=int)
 
-    connection = insta485.model.get_db()
+    if size < 0 or page < 0:
+        return flask.jsonify({}), 400
 
-    posts = []
+    connection = insta485.model.get_db()
     cur = connection.execute(
         "SELECT postid "
         "FROM posts "
-        "WHERE (owner = ? ) OR (owner IN"
-        "(SELECT username2 FROM following WHERE username1 = ? )) "
-        "ORDER BY postid DESC"
+        "WHERE (owner = ?) OR "
+        "(owner IN (SELECT username2 FROM following WHERE username1 = ?)) "
+        "ORDER BY postid DESC",
         (username, username, )
     )
     posts = cur.fetchall()
 
-    context = {}
+    if postid_lte == math.inf:
+        postid_lte = posts[0]["postid"]
     
-    return flask.jsonify(**context)
+    for i, post_dict in enumerate(posts):
+        if post_dict["postid"] <= postid_lte:
+            start = i
+            break
+
+    context = {}
+    context["next"] = "/api/v1/posts/?size={}&page={}&postid_lte={}".format(size,page+1,postid_lte)
+    context["results"] = posts[start+size*page:start+size*page+size]
+    context["url"] = flask.request.full_path
+    
+    return flask.jsonify(**context), 200
 
 
 @insta485.app.route('/api/v1/posts/<int:postid_url_slug>/')
@@ -58,4 +70,4 @@ def get_post(postid_url_slug):
         "postid": "/posts/{}/".format(postid_url_slug),
         "url": flask.request.path,
     }
-    return flask.jsonify(**context)
+    return flask.jsonify(**context), 200
