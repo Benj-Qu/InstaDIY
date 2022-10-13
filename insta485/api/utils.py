@@ -39,5 +39,4 @@ def check_authorization():
         if correct_password == password_db_string:
             flask.session["username"] = username
             return username, False, None
-    else:
-        return None, True, 403
+    return None, True, 403
