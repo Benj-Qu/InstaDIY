@@ -26,3 +26,4 @@ def get_likeid(username, postid):
     )
     results = cur.fetchone()
     return results["likeid"]
+

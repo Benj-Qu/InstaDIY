@@ -40,3 +40,14 @@ def check_authorization():
             flask.session["username"] = username
             return username, False, None
     return None, True, 403
+
+def postid_in_range(postid):
+    # Post IDs that are out of range should return a 404 error.
+    # return True if postid is in range
+    # return False if postid is not in range
+    connection = insta485.model.get_db()
+    cur = connection.execute(
+            "SELECT * FROM posts WHERE postid = ? ",
+            (postid, )
+        )
+    return len(cur.fetchall()) != 0

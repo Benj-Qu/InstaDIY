@@ -34,6 +34,12 @@ def create_like():
         return flask.jsonify(**context), 201
 
 
-# @insta485.app.route('/api/v1/likes/<likeid>/', methods=["DELETE"])
-# def delete_like(likeid):
-
+@insta485.app.route('/api/v1/likes/<likeid>/', methods=["DELETE"])
+def delete_like(likeid):
+    # Delete one “like”. Return 204 on success.
+    # If the likeid does not exist, return 404.
+    # If the user does not own the like, return 403.
+    username, has_error, error_code = check_authorization()
+    if has_error:
+        return flask.jsonify({}), error_code
+        
