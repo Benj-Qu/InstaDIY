@@ -31,11 +31,11 @@ class Comment extends React.Component {
 
     handleSubmit(commentsUrl, event) {
         event.preventDefault();
-        const{ text } = this.state;
+        const { text } = this.state;
         fetch(commentsUrl, {
-            credentials: "same-origin", 
-            method: "POST", 
-            headers: {'Content-Type': 'application/json'}, 
+            credentials: "same-origin",
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(text)
         })
             .then((response) => {
@@ -67,7 +67,7 @@ class Comment extends React.Component {
     }
 
     render() {
-        const {text, comments, commentsUrl} = this.state
+        const { text, comments, commentsUrl } = this.state
         return (
             comments.map((comment) => (
                 <div>
@@ -79,21 +79,21 @@ class Comment extends React.Component {
                     </div>
                     <div>
                         {comment.lognameOwnsThis
-                        ? 
-                        <button
-                            type="button"
-                            className="delete-comment-button"
-                            onClick={this.handleDeleteClick(comment.url, comment.commentid)}
-                        >
-                            Delete comment
-                        </button>
-                        : 
-                        null}
+                            ?
+                            <button
+                                type="button"
+                                className="delete-comment-button"
+                                onClick={this.handleDeleteClick(comment.url, comment.commentid)}
+                            >
+                                Delete comment
+                            </button>
+                            :
+                            null}
                     </div>
                     <div>
                         <form
                             className="comment-form"
-                            onSubmit={(e) => {this.handleSubmit(e, commentsUrl)}}
+                            onSubmit={(e) => { this.handleSubmit(e, commentsUrl) }}
                         >
                             <input
                                 type="text"
