@@ -58,3 +58,19 @@ def own_like(username, likeid):
     results = cur.fetchone()
     owner = results["owner"]
     return owner == username
+
+def own_comment(username, commentid):
+    """
+    Return True if username own the like
+    else return False
+    """
+    connection = insta485.model.get_db()
+    cur = connection.execute(
+        "SELECT * "
+        "FROM comments "
+        "WHERE commentid = ?",
+        (commentid)
+    )
+    results = cur.fetchone()
+    owner = results["owner"]
+    return owner == username

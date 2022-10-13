@@ -51,3 +51,14 @@ def postid_in_range(postid):
             (postid, )
         )
     return len(cur.fetchall()) != 0
+
+def commentid_in_range(commentid):
+    # Post IDs that are out of range should return a 404 error.
+    # return True if postid is in range
+    # return False if postid is not in range
+    connection = insta485.model.get_db()
+    cur = connection.execute(
+            "SELECT * FROM comments WHERE commentid = ? ",
+            (commentid, )
+        )
+    return len(cur.fetchall()) != 0
