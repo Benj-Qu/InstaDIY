@@ -1,6 +1,4 @@
 """REST API for comments."""
-from crypt import methods
-from multiprocessing import context
 import flask
 import insta485
 from insta485.api.db_operations import own_comment
