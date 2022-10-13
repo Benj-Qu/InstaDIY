@@ -1,5 +1,4 @@
 import React from "react";
-// import PropTypes from "prop-types";
 
 class Like extends React.Component {
   /* Display image and post owner of a single post
@@ -14,8 +13,8 @@ class Like extends React.Component {
   }
 
   handleClick() {
+    // const hasLiked = this.state.hasLiked;
     const { hasLiked } = this.state;
-
     if (hasLiked === false)
     {
       this.state.hasLiked = true;
@@ -26,7 +25,6 @@ class Like extends React.Component {
       this.state.hasLiked = false;
       this.state.numLikes -= 1;
     }
-    
   }
 
   render() {
