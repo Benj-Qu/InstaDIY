@@ -3,17 +3,33 @@ import flask
 import insta485
 import hashlib
 import arrow
+import math
 
 @insta485.app.route('/api/v1/posts/')
-def get_posts_without_size():
-    if flask.request.authorization:
-        username = flask.request.authorization['username']
-        password = flask.request.authorization['password']
+def get_posts():
+    
+    username = "awdeorio"
+
+    postid_lte = flask.request.args.get("postid_lte", default=-1, type=int)
+    size = flask.request.args.get("size", default=10, type=int)
+    page = flask.request.args.get("page", default=1, type=int)
+
+    posts = []
+    connection = insta485.model.get_db()
+    cur = connection.execute(
+        "SELECT postid "
+        "FROM posts "
+        "WHERE owner = ?  OR owner IN",
+        "SELECT username2 FROM following WHERE username1 = ? "
+        "ORDER BY postid DESC"
+        (username, username)
+    )
+    posts = cur.fetchall()
 
     context = {
         "next": "",
-        "results": get_posts(username),
-        "url": "/api/v1/posts/"
+        "results": [ {"postid": post["postid"], "url": "/api/v1/posts/{}/".format(post["postid"])} for post in posts[:size] ],
+        "url": "/api/v1/posts/",
     }
     
     return flask.jsonify(**context)
@@ -43,39 +59,3 @@ def get_post(postid_url_slug):
         "url": flask.request.path,
     }
     return flask.jsonify(**context)
-
-def get_posts(usr, n = 10):
-    posts = []
-    connection = insta485.model.get_db()
-
-    # posts of the user
-    cur = connection.execute(
-        "SELECT postid "
-        "FROM posts "
-        "WHERE owner = ? ",
-        (usr, )
-    )
-    posts = cur.fetchall()
-
-    # posts of following users
-    cur = connection.execute(
-        "SELECT username2 "
-        "FROM following "
-        "WHERE username1 = ? ",
-        (usr, )
-    )
-    following_list = cur.fetchall()
-
-    for following in following_list:
-        cur = connection.execute(
-            "SELECT postid "
-            "FROM posts "
-            "WHERE owner = ? ",
-            (following, )
-        )
-        posts += cur.fetchall()
-
-    # sort by postid
-    posts.sort(key=lambda d: d['postid'], reverse=True)
-
-    return [ {"postid": post, "url": "/api/v1/posts/{}/".format(post)} for post in posts[:n]]
