@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 class Like extends React.Component {
   /* Display image and post owner of a single post
    */
