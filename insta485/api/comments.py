@@ -3,6 +3,7 @@ from crypt import methods
 from multiprocessing import context
 import flask
 import insta485
+from insta485.api.db_operations import own_comment
 from insta485.api.utils import *
 
 @insta485.app.route("/api/v1/comments/", methods=["POST"])
@@ -39,4 +40,25 @@ def add_comment():
         "text": text,
         "url": "/api/v1/comments/{}/".format(commentid),
     }
-    
+    return flask.jsonify(**context), 201
+
+
+@insta485.app.route("/api/v1/comments/<commentid>/", methods=["DELETE"])
+def delete_comment(commentid):
+    username, has_error, error_code = check_authorization()
+    if has_error:
+        # 403
+        return flask.jsonify({}), error_code
+    if commentid_in_range(commentid) == False:
+        # if commentid is not in range
+        # return 404
+        return flask.jsonify({}), 404
+    if own_comment(username, commentid) == False:
+        return flask.jsonify({}), 403
+    connection = insta485.model.get_db()
+    connection.execute(
+        "DELETE FROM comments WHERE commentid = ? ",
+        (commentid)
+    )
+    connection.commit()
+    return flask.jsonify({}), 204
