@@ -2,10 +2,11 @@
 import flask
 import insta485
 from insta485.api.utils import check_authorization
-from db_operations import *
+from insta485.api.db_operations import *
 
-@insta485.app.route('/api/v1/likes/?postid=<postid>', methods=["POST"])
-def show_like(postid):
+@insta485.app.route('/api/v1/likes/', methods=["POST"])
+def create_like():
+    postid = flask.request.args.get('postid')
     username, has_error, error_code = check_authorization()
     if has_error:
         return flask.jsonify({}), error_code
@@ -31,4 +32,8 @@ def show_like(postid):
             "url": f"/api/v1/likes/{likeid}/"
         }
         return flask.jsonify(**context), 201
-        
+
+
+# @insta485.app.route('/api/v1/likes/<likeid>/', methods=["DELETE"])
+# def delete_like(likeid):
+
