@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import moment from "moment";
+import Like from "./like";
 
 class Post extends React.Component {
   constructor(props) {
@@ -46,14 +48,22 @@ class Post extends React.Component {
     const { comments, comments_url, created, imgUrl,
       likes, owner, ownerImgUrl, ownerShowUrl,
       postShowUrl, postid } = this.state;
-    let owner_img_url = "/uploads/{}".format(ownerImgUrl);
-    // Render post image and post owner
+    const { timestamp } = created.now();
     return (
       <div>
-        <a href="/users/{owner}/">
-          <img src={owner_img_url} alt={owner} />
-          <div> {owner} </div>
-        </a>
+        <div>
+          <a href={ownerShowUrl}>
+            <img src={ownerimgurl} alt={owner} />
+            <div> {owner} </div>
+          </a>
+        </div>
+        <div>
+          <a href={postShowUrl}>{timestamp}</a>
+        </div>
+        <div>
+          <img src={imgUrl} alt={imgUrl} />
+        </div>
+        <Like likes={likes} />
       </div>
     );
   }
