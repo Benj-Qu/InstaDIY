@@ -2,8 +2,6 @@
 import math
 import flask
 import insta485
-import hashlib
-import arrow
 from insta485.api.utils import check_authorization, postid_in_range
 
 @insta485.app.route('/api/v1/posts/')
@@ -15,7 +13,7 @@ def get_posts():
 
     postid_lte = flask.request.args.get("postid_lte", default=math.inf, type=int)
     size = flask.request.args.get("size", default=10, type=int)
-    page = flask.request.args.get("page", default=1, type=int)
+    page = flask.request.args.get("page", default=0, type=int)
 
     if size < 0 or page < 0:
         return flask.jsonify({}), 400
@@ -40,6 +38,8 @@ def get_posts():
             break
 
     results = posts[start+size*page:start+size*page+size]
+    for result in results:
+        result["url"] = "/api/v1/posts/{}/".format(result["postid"])
     if len(results) < size:
         next = ""
     else:
@@ -99,18 +99,30 @@ def get_post(postid_url_slug):
     context["created"] = raw_post["created"]
     context["imgUrl"] = "/uploads/{}".format(raw_post["filename"])
 
+    context["likes"] = {}
     cur = connection.execute(
-        "SELECT owner "
+        "SELECT likeid "
+        "FROM likes "
+        "WHERE owner= ? AND postid = ? ",
+        (username, postid_url_slug, )
+    )
+    logname_like = cur.fetchone()
+    context["likes"]["lognameLikesThis"] = (logname_like != None)
+
+    cur = connection.execute(
+        "SELECT * "
         "FROM likes "
         "WHERE postid = ? ",
         (postid_url_slug, )
     )
     raw_likes = cur.fetchall()
-
-    context["likes"] = {}
-    context["likes"]["lognameLikesThis"] = ({"owner", username} in raw_likes)
     context["likes"]["numLikes"] = len(raw_likes)
-    context["likes"]["url"] = "/api/v1/likes/{}/".format(postid_url_slug)
+
+    if context["likes"]["lognameLikesThis"]:
+        context["likes"]["url"] = "/api/v1/likes/{}/".format(logname_like["likeid"])
+    else:
+        context["likes"]["url"] = None
+
 
     context["owner"] = raw_post["owner"]
 
@@ -124,7 +136,7 @@ def get_post(postid_url_slug):
 
     context["ownerImgUrl"] = "/uploads/{}".format(raw_user["filename"])
     context["ownerShowUrl"] = "/users/{}/".format(raw_post["owner"])
-    context["postShowUrl"] = "/post/{}/".format(postid_url_slug)
+    context["postShowUrl"] = "/posts/{}/".format(postid_url_slug)
     context["postid"] = postid_url_slug
     context["url"] = "/api/v1/posts/{}/".format(postid_url_slug)
 
