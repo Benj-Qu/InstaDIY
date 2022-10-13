@@ -13,6 +13,16 @@ class Like extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // This line automatically assigns this.props.url to the const variable url
+    const { hasLiked, numLikes } = this.props;
+    // Call REST API to get the post's information
+    this.setState({
+      has_liked: hasLiked,
+      num_likes: numLikes
+    })
+  }
+
   handleClick() {
     // const hasLiked = this.state.hasLiked;
     const { url, hasLiked, numLikes } = this.props;
@@ -25,7 +35,7 @@ class Like extends React.Component {
     {
       this.state.has_liked = true;
       this.state.num_likes += 1;
-      
+
       fetch(url, { credentials: "same-origin", method: "POST" })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
