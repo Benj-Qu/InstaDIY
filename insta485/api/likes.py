@@ -2,16 +2,19 @@
 import flask
 import insta485
 from insta485.api import posts
-
+from utils import check_authorization
 
 
 
 @insta485.app.route('/api/v1/likes/?postid=<postid>', methods=["POST"])
 def show_like(postid):
-    likeid = 
+    connection = insta485.model.get_db()
+    username, has_error, error_code = check_authorization()
+    
+    # likeid = 
 
-    context = {
-        "likeid": likeid,
-        "url": f"/api/v1/likes/{likeid}/"
-    }
-    return flask.jsonify(**context), 201
+    # context = {
+    #     "likeid": likeid,
+    #     "url": f"/api/v1/likes/{likeid}/"
+    # }
+    # return flask.jsonify(**context), 201
