@@ -83,7 +83,11 @@ class Like extends React.Component {
 }
 
 Like.propTypes = {
-  likes: PropTypes.objectOf(PropTypes.bool, PropTypes.number, PropTypes.string).isRequired,
+  likes: PropTypes.objectOf(
+    PropTypes.bool.isRequired,
+    PropTypes.number.isRequired,
+    PropTypes.string.isRequired,
+  ).isRequired,
 };
 
 export default Like;

@@ -109,6 +109,15 @@ class Comment extends React.Component {
 }
 Comment.propTypes = {
     commentsUrl: PropTypes.string.isRequired,
-    comments: PropTypes.arrayOf(Object).isRequired,
+    comments: PropTypes.arrayOf(
+        PropTypes.object(
+            PropTypes.string.isRequired,
+            PropTypes.bool.isRequired,
+            PropTypes.string.isRequired,
+            PropTypes.string.isRequired,
+            PropTypes.string.isRequired,
+            PropTypes.string.isRequired,
+        ).isRequired
+    ).isRequired,
 };
 export default Comment;
