@@ -8,7 +8,7 @@ class Posts extends React.Component {
         super(props);
         this.state = {
             next: "",
-            posts: [],
+            results: [],
         };
     }
 
@@ -22,7 +22,7 @@ class Posts extends React.Component {
             .then((data) => {
                 this.setState({
                     next: data.next,
-                    posts: data.posts,
+                    results: data.results,
                 });
             })
             .catch((error) => console.log(error));
@@ -38,17 +38,17 @@ class Posts extends React.Component {
             .then((data) => {
                 this.setState(prevState => ({
                     next: data.next,
-                    posts: [...prevState.posts, ...data.posts],
+                    results: [...prevState.results, ...data.results],
                 }));
             })
             .catch((error) => console.log(error));
     }
 
     render() {
-        const { next, posts } = this.state;
+        const { next, results } = this.state;
         return (
             <InfiniteScroll
-                dataLength={posts.length}
+                dataLength={results.length}
                 next={() => this.extend()}
                 hasMore={next !== ""}
                 loader={<h4>Loading...</h4>}
@@ -59,7 +59,7 @@ class Posts extends React.Component {
                 }
             >
                 {
-                    posts.map((post) => (
+                    results.map((post) => (
                         <Post url={post.url} />
                     ))
                 }
