@@ -42,7 +42,7 @@ class Post extends React.Component {
       .catch((error) => console.log(error));
   }
 
-  handleClick() {
+  likeClick() {
     // const hasLiked = this.state.hasLiked;
     const { likes } = this.state
 
@@ -63,7 +63,7 @@ class Post extends React.Component {
         })
         .catch((error) => console.log(error));
     }
-    if (likes.hasLiked === true) {
+    else {
       fetch(likes.url, { credentials: "same-origin", method: "DELETE" })
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
@@ -104,7 +104,7 @@ class Post extends React.Component {
             <button
               type='button'
               className="like-unlike-button"
-              onClick={() => this.handleClick()}
+              onClick={() => this.likeClick()}
             >
               {likes.hasLiked ? "unlike" : "like"}
             </button>
