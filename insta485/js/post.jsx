@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
-import Like from "./like";
 import Comment from "./comment";
 
 class Post extends React.Component {
@@ -57,7 +56,7 @@ class Post extends React.Component {
           this.setState(prevState => ({
             likes: {
               lognamesLikesThis: true,
-              numLikes: prevState.likes.nummLikes + 1,
+              numLikes: prevState.likes.numLikes + 1,
               url: data.url
             }
           }))
@@ -70,16 +69,14 @@ class Post extends React.Component {
           if (!response.ok) throw Error(response.statusText);
           return response.json();
         })
-        .then((data) => {
-          this.setState(prevState => ({
-            likes: {
-              lognamesLikesThis: false,
-              numLikes: prevState.likes.nummLikes - 1,
-              url: data.url
-            }
-          }))
-        })
         .catch((error) => console.log(error));
+      this.setState(prevState => ({
+        likes: {
+          lognamesLikesThis: false,
+          numLikes: prevState.likes.numLikes - 1,
+          url: null
+        }
+      }))
     }
   }
 
