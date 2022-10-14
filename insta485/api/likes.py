@@ -56,7 +56,7 @@ def delete_like(likeid):
     connection = insta485.model.get_db()
     connection.execute(
         "DELETE FROM likes WHERE likeid = ? ",
-        (likeid)
+        (likeid, )
     )
     connection.commit()
     return flask.jsonify({}), 204

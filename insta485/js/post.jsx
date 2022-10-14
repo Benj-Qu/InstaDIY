@@ -11,11 +11,14 @@ class Post extends React.Component {
       commentsUrl: "",
       created: "",
       imgUrl: "",
-      likes: {},
+      lognameLikesThis: false,
+      numLikes: 0,
+      likesUrl: "",
       owner: "",
       ownerImgUrl: "",
       ownerShowUrl: "",
       postShowUrl: "",
+      postid: 0
     };
   }
 
@@ -32,57 +35,56 @@ class Post extends React.Component {
           commentsUrl: data.comments_url,
           created: data.created,
           imgUrl: data.imgUrl,
-          likes: data.likes,
+          lognameLikesThis: data.likes.lognameLikesThis,
+          numLikes: data.likes.numLikes,
+          likesUrl: data.likes.url,
           owner: data.owner,
           ownerImgUrl: data.ownerImgUrl,
           ownerShowUrl: data.ownerShowUrl,
           postShowUrl: data.postShowUrl,
+          postid: data.postid,
         });
       })
       .catch((error) => console.log(error));
   }
 
   likeClick() {
-    // const hasLiked = this.state.hasLiked;
-    const { likes } = this.state
+    const { lognameLikesThis, likesUrl, postid } = this.state
 
-    if (likes.hasLiked === false) {
-      fetch(likes.url, { credentials: "same-origin", method: "POST" })
+    if (lognameLikesThis === false) {
+      const likePostUrl = `/api/v1/likes/?postid=${postid}`
+      fetch(likePostUrl, { credentials: "same-origin", method: "POST" })
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
           return response.json();
         })
         .then((data) => {
           this.setState(prevState => ({
-            likes: {
-              lognamesLikesThis: true,
-              numLikes: prevState.likes.numLikes + 1,
-              url: data.url
-            }
+            lognameLikesThis: true,
+            numLikes: prevState.numLikes + 1,
+            likesUrl: data.url
           }))
         })
         .catch((error) => console.log(error));
     }
     else {
-      fetch(likes.url, { credentials: "same-origin", method: "DELETE" })
+      fetch(likesUrl, { credentials: "same-origin", method: "DELETE" })
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
           return response.json();
         })
         .catch((error) => console.log(error));
       this.setState(prevState => ({
-        likes: {
-          lognamesLikesThis: false,
-          numLikes: prevState.likes.numLikes - 1,
-          url: null
-        }
+        lognameLikesThis: false,
+        numLikes: prevState.numLikes - 1,
+        likesUrl: null
       }))
     }
   }
 
   render() {
     const { comments, commentsUrl, created, imgUrl,
-      likes, owner, ownerImgUrl, ownerShowUrl,
+      lognameLikesThis, numLikes, owner, ownerImgUrl, ownerShowUrl,
       postShowUrl } = this.state;
     const { timestamp } = moment(created).fromNow();
     return (
@@ -106,12 +108,12 @@ class Post extends React.Component {
               className="like-unlike-button"
               onClick={() => this.likeClick()}
             >
-              {likes.hasLiked ? "unlike" : "like"}
+              {lognameLikesThis ? "unlike" : "like"}
             </button>
           </div>
           <div>
-            {likes.numLikes}
-            {likes.numLikes === 1 ? " like" : " likes"}
+            {numLikes}
+            {numLikes === 1 ? " like" : " likes"}
           </div>
         </div>
         <Comment comments={comments} commentsUrl={commentsUrl} />

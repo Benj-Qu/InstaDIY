@@ -38,7 +38,7 @@ def likeid_exists(likeid):
         "SELECT * "
         "FROM likes "
         "WHERE likeid = ?",
-        (likeid)
+        (likeid, )
     )
     return len(cur.fetchall()) != 0
 
@@ -53,7 +53,7 @@ def own_like(username, likeid):
         "SELECT * "
         "FROM likes "
         "WHERE likeid = ?",
-        (likeid)
+        (likeid, )
     )
     results = cur.fetchone()
     owner = results["owner"]
@@ -69,7 +69,7 @@ def own_comment(username, commentid):
         "SELECT * "
         "FROM comments "
         "WHERE commentid = ?",
-        (commentid)
+        (commentid, )
     )
     results = cur.fetchone()
     owner = results["owner"]
