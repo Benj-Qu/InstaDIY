@@ -70,41 +70,41 @@ class Comment extends React.Component {
         const { text, comments, commentsUrl } = this.state
         return (
             <div>
-            {comments.map((comment) => (
+                {comments.map((comment) => (
+                    <div>
+                        <div>
+                            <a href="/users/{{comment.owner}}/">
+                                {comment.owner}
+                            </a>
+                            {comment.text}
+                        </div>
+                        <div>
+                            {comment.lognameOwnsThis
+                                ?
+                                <button
+                                    type="button"
+                                    className="delete-comment-button"
+                                    onClick={this.handleDeleteClick(comment.url, comment.commentid)}
+                                >
+                                    Delete comment
+                                </button>
+                                :
+                                null}
+                        </div>
+                    </div>
+                ))}
                 <div>
-                    <div>
-                        <a href="/users/{{comment.owner}}/">
-                            {comment.owner}
-                        </a>
-                        {comment.text}
-                    </div>
-                    <div>
-                        {comment.lognameOwnsThis
-                            ?
-                            <button
-                                type="button"
-                                className="delete-comment-button"
-                                onClick={this.handleDeleteClick(comment.url, comment.commentid)}
-                            >
-                                Delete comment
-                            </button>
-                            :
-                            null}
-                    </div>
-                </div>
-            ))}
-            <div>
-            <form
-                className="comment-form"
-                onSubmit={(e) => { this.handleSubmit(e, commentsUrl) }}
-            >
-                <input
-                    type="text"
-                    value={text}
-                    onChange={this.handleChange}
-                />
-            </form>
-            </div >
+                    <form
+                        className="comment-form"
+                        onSubmit={(e) => { this.handleSubmit(e, commentsUrl) }}
+                    >
+                        <input
+                            type="text"
+                            value={text}
+                            onChange={this.handleChange}
+                        />
+                    </form>
+                </div >
             </div>
         );
     }
