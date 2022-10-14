@@ -43,6 +43,42 @@ class Post extends React.Component {
       .catch((error) => console.log(error));
   }
 
+  handleClick() {
+    // const hasLiked = this.state.hasLiked;
+    const { likes } = this.state
+
+    if (likes.hasLiked === false) {
+      fetch(likes.url, { credentials: "same-origin", method: "POST" })
+        .then((response) => {
+          if (!response.ok) throw Error(response.statusText);
+          return response.json();
+        })
+        .catch((error) => console.log(error));
+
+      this.setState(prevState => ({
+        likes: {
+          lognamesLikesThis: true,
+          numLikes: prevState.likes.nummLikes + 1,
+          url: ""
+        }
+      }))
+
+
+
+    }
+    if (likes.hasLiked === true) {
+      this.state.has_liked = false;
+      this.state.num_likes -= 1;
+
+      fetch(likes.url, { credentials: "same-origin", method: "DELETE" })
+        .then((response) => {
+          if (!response.ok) throw Error(response.statusText);
+          return response.json();
+        })
+        .catch((error) => console.log(error));
+    }
+  }
+
   render() {
     const { comments, commentsUrl, created, imgUrl,
       likes, owner, ownerImgUrl, ownerShowUrl,

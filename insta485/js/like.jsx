@@ -14,7 +14,7 @@ class Like extends React.Component {
   }
 
   componentDidMount() {
-    
+
     // This line automatically assigns this.props.url to the const variable url
     const { likes } = this.props;
     // console.log(likes);
@@ -27,38 +27,7 @@ class Like extends React.Component {
     })
   }
 
-  handleClick() {
-    // const hasLiked = this.state.hasLiked;
-    const { likes } = this.props;
-    this.setState({
-      has_liked: likes.hasLiked,
-      num_likes: likes.numLikes
-    })
 
-    if (likes.hasLiked === false) {
-      this.state.has_liked = true;
-      this.state.num_likes += 1;
-
-      fetch(likes.url, { credentials: "same-origin", method: "POST" })
-        .then((response) => {
-          if (!response.ok) throw Error(response.statusText);
-          return response.json();
-        })
-        .catch((error) => console.log(error));
-
-    }
-    if (likes.hasLiked === true) {
-      this.state.has_liked = false;
-      this.state.num_likes -= 1;
-
-      fetch(likes.url, { credentials: "same-origin", method: "DELETE" })
-        .then((response) => {
-          if (!response.ok) throw Error(response.statusText);
-          return response.json();
-        })
-        .catch((error) => console.log(error));
-    }
-  }
 
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
