@@ -46,6 +46,7 @@ class Posts extends React.Component {
 
     render() {
         const { next, results } = this.state;
+        console.log(next, results);
         return (
             <InfiniteScroll
                 dataLength={results.length}
