@@ -113,7 +113,7 @@ Comment.propTypes = {
     commentsUrl: PropTypes.string.isRequired,
     comments: PropTypes.arrayOf(
         PropTypes.objectOf(
-            PropTypes.string.isRequired,
+            PropTypes.number.isRequired,
             PropTypes.bool.isRequired,
             PropTypes.string.isRequired,
             PropTypes.string.isRequired,
