@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
-import Comment from "./comment";
 
 class Post extends React.Component {
   constructor(props) {
@@ -18,7 +17,8 @@ class Post extends React.Component {
       ownerImgUrl: "",
       ownerShowUrl: "",
       postShowUrl: "",
-      postid: 0
+      postid: 0,
+      newComment: "",
     };
   }
 
@@ -46,9 +46,53 @@ class Post extends React.Component {
         });
       })
       .catch((error) => console.log(error));
+    const { comments } = this.state;
+    console.log(comments);
   }
 
-  likeClick() {
+  handleDeleteClick(url, id) {
+    const { comments } = this.state;
+    fetch(url, { credentials: "same-origin", method: "DELETE" })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then(() => {
+        this.setState({
+          comments: comments.filter(c => c.commentid !== id)
+        });
+      })
+      .catch((error) => console.log(error));
+  }
+
+  handleChange(event) {
+    this.setState({ newComment: event.target.value });
+  }
+
+
+  handleSubmit(commentsUrl, event) {
+    event.preventDefault();
+    const { newComment } = this.state;
+    fetch(commentsUrl, {
+      credentials: "same-origin",
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newComment)
+    })
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((data) => {
+        this.setState(prevState => ({
+          newComment: "",
+          comments: prevState.comments.concat(data)
+        }));
+      })
+      .catch((error) => console.log(error));
+  }
+
+  likeClick(likeOnly) {
     const { lognameLikesThis, likesUrl, postid } = this.state
 
     if (lognameLikesThis === false) {
@@ -67,7 +111,7 @@ class Post extends React.Component {
         })
         .catch((error) => console.log(error));
     }
-    else {
+    else if (!likeOnly) {
       fetch(likesUrl, { credentials: "same-origin", method: "DELETE" })
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
@@ -82,10 +126,12 @@ class Post extends React.Component {
     }
   }
 
+
+
   render() {
     const { comments, commentsUrl, created, imgUrl,
       lognameLikesThis, numLikes, owner, ownerImgUrl, ownerShowUrl,
-      postShowUrl } = this.state;
+      postShowUrl, newComment } = this.state;
     const { timestamp } = moment(created).fromNow();
     return (
       <div>
@@ -99,14 +145,14 @@ class Post extends React.Component {
           <a href={postShowUrl}>{timestamp}</a>
         </div>
         <div>
-          <img src={imgUrl} alt={imgUrl} />
+          <img src={imgUrl} alt={imgUrl} onDoubleClick={() => this.likeClick(true)} />
         </div>
         <div>
           <div>
             <button
               type='button'
               className="like-unlike-button"
-              onClick={() => this.likeClick()}
+              onClick={() => this.likeClick(false)}
             >
               {lognameLikesThis ? "unlike" : "like"}
             </button>
@@ -116,7 +162,43 @@ class Post extends React.Component {
             {numLikes === 1 ? " like" : " likes"}
           </div>
         </div>
-        <Comment comments={comments} commentsUrl={commentsUrl} />
+        {
+          comments.map((comment) => (
+            <div>
+              <div>
+                <a href={comment.ownerShowUrl}>
+                  {comment.owner}
+                </a>
+                {comment.text}
+              </div>
+              <div>
+                {comment.lognameOwnsThis
+                  ?
+                  <button
+                    type="button"
+                    className="delete-comment-button"
+                    onClick={this.handleDeleteClick(comment.url, comment.commentid)}
+                  >
+                    Delete comment
+                  </button>
+                  :
+                  null}
+              </div>
+            </div>
+          ))
+        }
+        <div>
+          <form
+            className="comment-form"
+            onSubmit={(e) => { this.handleSubmit(e, commentsUrl) }}
+          >
+            <input
+              type="text"
+              value={newComment}
+              onChange={this.handleChange}
+            />
+          </form>
+        </div >
       </div>
     );
   }

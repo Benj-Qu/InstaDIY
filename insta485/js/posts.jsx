@@ -61,7 +61,7 @@ class Posts extends React.Component {
             >
                 {
                     results.map((post) => (
-                        <Post url={post.url} />
+                        <Post key={post.id} url={post.url} />
                     ))
                 }
             </InfiniteScroll>

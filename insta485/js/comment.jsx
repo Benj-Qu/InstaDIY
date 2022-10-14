@@ -24,33 +24,6 @@ class Comment extends React.Component {
     }
 
 
-    handleChange(event) {
-        this.setState({ text: event.target.value });
-    }
-
-
-    handleSubmit(commentsUrl, event) {
-        event.preventDefault();
-        const { text } = this.state;
-        fetch(commentsUrl, {
-            credentials: "same-origin",
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(text)
-        })
-            .then((response) => {
-                if (!response.ok) throw Error(response.statusText);
-                return response.json();
-            })
-            .then((data) => {
-                this.setState(prevState => ({
-                    text: "",
-                    comments: prevState.comments.concat(data)
-                }));
-            })
-            .catch((error) => console.log(error));
-    }
-
     handleDeleteClick(url, id) {
         const { comments } = this.state;
         fetch(url, { credentials: "same-origin", method: "DELETE" })
