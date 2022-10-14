@@ -98,7 +98,21 @@ class Post extends React.Component {
         <div>
           <img src={imgUrl} alt={imgUrl} />
         </div>
-        <Like likes={likes} />
+        <div>
+          <div>
+            <button
+              type='button'
+              className="like-unlike-button"
+              onClick={() => this.handleClick()}
+            >
+              {likes.hasLiked ? "unlike" : "like"}
+            </button>
+          </div>
+          <div>
+            {likes.numLikes}
+            {likes.numLikes === 1 ? " like" : " likes"}
+          </div>
+        </div>
         <Comment comments={comments} commentsUrl={commentsUrl} />
       </div>
     );

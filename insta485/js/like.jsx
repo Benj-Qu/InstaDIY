@@ -35,22 +35,7 @@ class Like extends React.Component {
     const { likes } = this.props;
     // Render post image and post owner
     return (
-      <div>
-        <div>
-          <button
-            type='button'
-            className="like-unlike-button"
-            onClick={() => this.handleClick()}
-          >
-            {likes.hasLiked ? "unlike" : "like"}
-          </button>
-        </div>
-        <div>
-          {likes.numLikes}
-          {" "}
-          {likes.numLikes === 1 ? "like" : "likes"}
-        </div>
-      </div>
+      
     );
   }
 }
