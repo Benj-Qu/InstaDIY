@@ -83,6 +83,9 @@ class Like extends React.Component {
 }
 
 Like.propTypes = {
+  // lognameLikesThis: PropTypes.bool.isRequired,
+  // numLikes: PropTypes.number.isRequired,
+  // url: PropTypes.string.isRequired
   likes: PropTypes.objectOf(
     PropTypes.bool.isRequired,
     PropTypes.number.isRequired,
