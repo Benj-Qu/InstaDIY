@@ -14,8 +14,12 @@ class Like extends React.Component {
   }
 
   componentDidMount() {
+    
     // This line automatically assigns this.props.url to the const variable url
     const { likes } = this.props;
+    // console.log(likes);
+    // console.log(likes.lognameLikesThis);
+    // console.log(likes.numLikes);
     // Call REST API to get the post's information
     this.setState({
       has_liked: likes.hasLiked,
@@ -69,7 +73,7 @@ class Like extends React.Component {
             className="like-unlike-button"
             onClick={() => this.handleClick()}
           >
-            {likes.hasLiked ? "unlike" : ""}
+            {likes.hasLiked ? "unlike" : "like"}
           </button>
         </div>
         <div>
@@ -83,6 +87,9 @@ class Like extends React.Component {
 }
 
 Like.propTypes = {
+  // lognameLikesThis: PropTypes.bool.isRequired,
+  // numLikes: PropTypes.number.isRequired,
+  // url: PropTypes.string.isRequired
   likes: PropTypes.objectOf(
     PropTypes.bool.isRequired,
     PropTypes.number.isRequired,
