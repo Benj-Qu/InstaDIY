@@ -69,7 +69,8 @@ class Comment extends React.Component {
     render() {
         const { text, comments, commentsUrl } = this.state
         return (
-            comments.map((comment) => (
+            <div>
+            {comments.map((comment) => (
                 <div>
                     <div>
                         <a href="/users/{{comment.owner}}/">
@@ -90,27 +91,28 @@ class Comment extends React.Component {
                             :
                             null}
                     </div>
-                    <div>
-                        <form
-                            className="comment-form"
-                            onSubmit={(e) => { this.handleSubmit(e, commentsUrl) }}
-                        >
-                            <input
-                                type="text"
-                                value={text}
-                                onChange={this.handleChange}
-                            />
-                        </form>
-                    </div>
                 </div>
-            ))
+            ))}
+            <div>
+            <form
+                className="comment-form"
+                onSubmit={(e) => { this.handleSubmit(e, commentsUrl) }}
+            >
+                <input
+                    type="text"
+                    value={text}
+                    onChange={this.handleChange}
+                />
+            </form>
+            </div >
+            </div>
         );
     }
 }
 Comment.propTypes = {
     commentsUrl: PropTypes.string.isRequired,
     comments: PropTypes.arrayOf(
-        PropTypes.object(
+        PropTypes.objectOf(
             PropTypes.string.isRequired,
             PropTypes.bool.isRequired,
             PropTypes.string.isRequired,
