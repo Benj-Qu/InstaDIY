@@ -20,8 +20,8 @@ def get_posts():
     if size < 0 or page < 0:
         return flask.jsonify({}), 400
 
-    connection = insta485.model.get_db()
-    cur = connection.execute(
+    # connection = insta485.model.get_db()
+    cur = insta485.model.get_db().execute(
         "SELECT postid "
         "FROM posts "
         "WHERE (owner = ?) OR "
@@ -41,15 +41,18 @@ def get_posts():
 
     results = posts[start+size*page:start+size*page+size]
     for result in results:
-        result["url"] = "/api/v1/posts/{}/".format(result["postid"])
+        result["url"] = f"/api/v1/posts/{result['postid']}/"
+        # result["url"] = "/api/v1/posts/{}/".format(result["postid"])
     if len(results) < size:
-        next = ""
+        next_post = ""
     else:
-        next = "/api/v1/posts/?size" \
-                "={}&page={}&postid_lte={}".format(size, page+1, postid_lte)
+        next_post = f"/api/v1/posts/?size={size}"\
+                    f"&page={page+1}&postid_lte={postid_lte}"
+        # next = "/api/v1/posts/?size" \
+        #         "={}&page={}&postid_lte={}".format(size, page+1, postid_lte)
 
     context = {
-        "next": next,
+        "next": next_post,
         "results": results,
         "url": flask.request.full_path.rstrip("?")
     }
@@ -85,14 +88,16 @@ def get_post(postid_url_slug):
         comment["commentid"] = raw_comment["commentid"]
         comment["lognameOwnsThis"] = (raw_comment["owner"] == username)
         comment["owner"] = raw_comment["owner"]
-        comment["ownerShowUrl"] = "/users/{}/".format(raw_comment["owner"])
+        comment["ownerShowUrl"] = f"/users/{raw_comment['owner']}/"
+        # comment["ownerShowUrl"] = "/users/{}/".format(raw_comment["owner"])
         comment["text"] = raw_comment["text"]
-        comment["url"] = "/api/v1/comments" \
-                         "/{}/".format(raw_comment["commentid"])
+        comment["url"] = f"/api/v1/comments/{raw_comment['commentid']}/"
+        # comment["url"] = "/api/v1/comments" \
+        #                  "/{}/".format(raw_comment["commentid"])
         context["comments"] += [comment]
-
-    context["comments_url"] = "/api/v1/comments/?postid" \
-                              "={}".format(postid_url_slug)
+    context["comments_url"] = f"/api/v1/comments/?postid={postid_url_slug}"
+    # context["comments_url"] = "/api/v1/comments/?postid" \
+    #                           "={}".format(postid_url_slug)
 
     cur = connection.execute(
         "SELECT created, filename, owner "
@@ -103,7 +108,8 @@ def get_post(postid_url_slug):
     raw_post = cur.fetchone()
 
     context["created"] = raw_post["created"]
-    context["imgUrl"] = "/uploads/{}".format(raw_post["filename"])
+    context["imgUrl"] = f"/uploads/{raw_post['filename']}"
+    # context["imgUrl"] = "/uploads/{}".format(raw_post["filename"])
 
     context["likes"] = {}
     cur = connection.execute(
@@ -125,8 +131,9 @@ def get_post(postid_url_slug):
     context["likes"]["numLikes"] = len(raw_likes)
 
     if context["likes"]["lognameLikesThis"]:
-        context["likes"]["url"] = "/api/v1/likes" \
-                                  "/{}/".format(logname_like["likeid"])
+        context["likes"]["url"] = f"/api/v1/likes/{logname_like['likeid']}/"
+        # context["likes"]["url"] = "/api/v1/likes" \
+        #                           "/{}/".format(logname_like["likeid"])
     else:
         context["likes"]["url"] = None
 
@@ -139,11 +146,15 @@ def get_post(postid_url_slug):
         (raw_post["owner"], )
     )
     raw_user = cur.fetchone()
-
-    context["ownerImgUrl"] = "/uploads/{}".format(raw_user["filename"])
-    context["ownerShowUrl"] = "/users/{}/".format(raw_post["owner"])
-    context["postShowUrl"] = "/posts/{}/".format(postid_url_slug)
+    context["ownerImgUrl"] = f"/uploads/{raw_user['filename']}"
+    context["ownerShowUrl"] = f"/users/{raw_post['owner']}/"
+    context["postShowUrl"] = f"/posts/{postid_url_slug}/"
+    context["url"] = f"/api/v1/posts/{postid_url_slug}/"
     context["postid"] = postid_url_slug
-    context["url"] = "/api/v1/posts/{}/".format(postid_url_slug)
+    # context["ownerImgUrl"] = "/uploads/{}".format(raw_user["filename"])
+    # context["ownerShowUrl"] = "/users/{}/".format(raw_post["owner"])
+    # context["postShowUrl"] = "/posts/{}/".format(postid_url_slug)
+    # context["postid"] = postid_url_slug
+    # context["url"] = "/api/v1/posts/{}/".format(postid_url_slug)
 
     return flask.jsonify(**context), 200

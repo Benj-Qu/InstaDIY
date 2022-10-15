@@ -1,7 +1,7 @@
 """Utils for check authorization and check post_id in range."""
+import hashlib
 import flask
 import insta485
-import hashlib
 
 
 def check_authorization():

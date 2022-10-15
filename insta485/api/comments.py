@@ -2,7 +2,9 @@
 import flask
 import insta485
 from insta485.api.db_operations import own_comment
-from insta485.api.utils import *
+from insta485.api.utils import (check_authorization,
+                                postid_in_range,
+                                commentid_in_range)
 
 
 @insta485.app.route("/api/v1/comments/", methods=["POST"])
@@ -36,9 +38,11 @@ def add_comment():
         "commentid": commentid,
         "lognameOwnsThis": True,
         "owner": username,
-        "ownerShowUrl": "/users/{}/".format(username),
+        "ownerShowUrl": f"/users/{username}/",
+        # "ownerShowUrl": "/users/{}/".format(username),
         "text": text,
-        "url": "/api/v1/comments/{}/".format(commentid),
+        "url": f"/api/v1/comments/{commentid}/",
+        # "url": "/api/v1/comments/{}/".format(commentid),
     }
     return flask.jsonify(**context), 201
 

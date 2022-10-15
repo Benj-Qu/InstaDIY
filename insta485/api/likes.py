@@ -1,8 +1,10 @@
 """REST API for likes."""
 import flask
 import insta485
-from insta485.api.utils import *
-from insta485.api.db_operations import *
+from insta485.api.utils import check_authorization, postid_in_range
+from insta485.api.db_operations import (has_liked,
+                                        get_likeid,
+                                        own_like, likeid_exists)
 
 
 @insta485.app.route('/api/v1/likes/', methods=["POST"])
@@ -23,23 +25,25 @@ def create_like():
         likeid = get_likeid(username, postid)
         context = {
             "likeid": likeid,
-            "url": "/api/v1/likes/{}/".format(likeid)
+            "url": f"/api/v1/likes/{likeid}/"
+            # "url": "/api/v1/likes/{}/".format(likeid)
         }
         return flask.jsonify(**context), 200
-    else:
-        connection = insta485.model.get_db()
-        connection.execute(
-            "INSERT INTO likes(owner, postid) "
-            "VALUES (?, ?) ",
-            (username, postid, )
-        )
-        connection.commit()
-        likeid = get_likeid(username, postid)
-        context = {
-            "likeid": likeid,
-            "url": "/api/v1/likes/{}/".format(likeid)
-        }
-        return flask.jsonify(**context), 201
+
+    connection = insta485.model.get_db()
+    connection.execute(
+        "INSERT INTO likes(owner, postid) "
+        "VALUES (?, ?) ",
+        (username, postid, )
+    )
+    connection.commit()
+    likeid = get_likeid(username, postid)
+    context = {
+        "likeid": likeid,
+        "url": f"/api/v1/likes/{likeid}/"
+        # "url": "/api/v1/likes/{}/".format(likeid)
+    }
+    return flask.jsonify(**context), 201
 
 
 @insta485.app.route('/api/v1/likes/<likeid>/', methods=["DELETE"])
