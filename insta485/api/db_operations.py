@@ -1,5 +1,6 @@
 import insta485
 
+
 def has_liked(username, postid):
     """
     Return True if username has already liked this postid
@@ -58,6 +59,7 @@ def own_like(username, likeid):
     results = cur.fetchone()
     owner = results["owner"]
     return owner == username
+
 
 def own_comment(username, commentid):
     """

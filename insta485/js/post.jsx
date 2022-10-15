@@ -22,6 +22,7 @@ class Post extends React.Component {
     };
   }
 
+
   componentDidMount() {
     const { url } = this.props;
     fetch(url, { credentials: "same-origin" })

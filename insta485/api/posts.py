@@ -4,6 +4,7 @@ import flask
 import insta485
 from insta485.api.utils import check_authorization, postid_in_range
 
+
 @insta485.app.route('/api/v1/posts/')
 def get_posts():
 
@@ -11,7 +12,8 @@ def get_posts():
     if has_error:
         return flask.jsonify({}), error_code
 
-    postid_lte = flask.request.args.get("postid_lte", default=math.inf, type=int)
+    postid_lte = flask.request.args.get("postid_lte",
+                                        default=math.inf, type=int)
     size = flask.request.args.get("size", default=10, type=int)
     page = flask.request.args.get("page", default=0, type=int)
 
@@ -43,7 +45,8 @@ def get_posts():
     if len(results) < size:
         next = ""
     else:
-        next = "/api/v1/posts/?size={}&page={}&postid_lte={}".format(size,page+1,postid_lte)
+        next = "/api/v1/posts/?size" \
+                "={}&page={}&postid_lte={}".format(size, page+1, postid_lte)
 
     context = {
         "next": next,
@@ -83,10 +86,12 @@ def get_post(postid_url_slug):
         comment["owner"] = raw_comment["owner"]
         comment["ownerShowUrl"] = "/users/{}/".format(raw_comment["owner"])
         comment["text"] = raw_comment["text"]
-        comment["url"] = "/api/v1/comments/{}/".format(raw_comment["commentid"])
+        comment["url"] = "/api/v1/comments" \
+                         "/{}/".format(raw_comment["commentid"])
         context["comments"] += [comment]
 
-    context["comments_url"] = "/api/v1/comments/?postid={}".format(postid_url_slug)
+    context["comments_url"] = "/api/v1/comments/?postid" \
+                              "={}".format(postid_url_slug)
 
     cur = connection.execute(
         "SELECT created, filename, owner "
@@ -107,7 +112,7 @@ def get_post(postid_url_slug):
         (username, postid_url_slug, )
     )
     logname_like = cur.fetchone()
-    context["likes"]["lognameLikesThis"] = (logname_like != None)
+    context["likes"]["lognameLikesThis"] = (logname_like is not None)
 
     cur = connection.execute(
         "SELECT * "
@@ -119,10 +124,10 @@ def get_post(postid_url_slug):
     context["likes"]["numLikes"] = len(raw_likes)
 
     if context["likes"]["lognameLikesThis"]:
-        context["likes"]["url"] = "/api/v1/likes/{}/".format(logname_like["likeid"])
+        context["likes"]["url"] = "/api/v1/likes" \
+                                  "/{}/".format(logname_like["likeid"])
     else:
         context["likes"]["url"] = None
-
 
     context["owner"] = raw_post["owner"]
 

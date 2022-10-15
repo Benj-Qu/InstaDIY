@@ -4,6 +4,7 @@ import insta485
 from insta485.api.utils import *
 from insta485.api.db_operations import *
 
+
 @insta485.app.route('/api/v1/likes/', methods=["POST"])
 def create_like():
     postid = flask.request.args.get('postid')
@@ -12,7 +13,7 @@ def create_like():
     if has_error:
         return flask.jsonify({}), error_code
 
-    if postid_in_range(postid) == False:
+    if postid_in_range(postid) is False:
         # if postid is not in range
         # return 404
         return flask.jsonify({}), 404
@@ -49,9 +50,9 @@ def delete_like(likeid):
     if has_error:
         # 403
         return flask.jsonify({}), error_code
-    if likeid_exists(likeid) == False:
+    if likeid_exists(likeid) is False:
         return flask.jsonify({}), 404
-    if own_like(username, likeid) == False:
+    if own_like(username, likeid) is False:
         return flask.jsonify({}), 403
     connection = insta485.model.get_db()
     connection.execute(
