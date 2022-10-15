@@ -30,6 +30,7 @@ class Post extends React.Component {
         return response.json();
       })
       .then((data) => {
+        console.log(data)
         this.setState({
           comments: data.comments,
           commentsUrl: data.comments_url,
@@ -52,10 +53,13 @@ class Post extends React.Component {
 
   handleDeleteClick(url, id) {
     const { comments } = this.state;
+    console.log(url)
     fetch(url, { credentials: "same-origin", method: "DELETE" })
       .then((response) => {
+        console.log("11111")
         if (!response.ok) throw Error(response.statusText);
-        return response.json();
+        console.log("success")
+        // return response.json();
       })
       .then(() => {
         this.setState({
@@ -70,14 +74,14 @@ class Post extends React.Component {
   }
 
 
-  handleSubmit(commentsUrl, event) {
+  handleSubmit(event, commentsUrl) {
     event.preventDefault();
     const { newComment } = this.state;
     fetch(commentsUrl, {
       credentials: "same-origin",
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newComment)
+      body: JSON.stringify({text: newComment})
     })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
@@ -177,7 +181,7 @@ class Post extends React.Component {
                   <button
                     type="button"
                     className="delete-comment-button"
-                    onClick={this.handleDeleteClick(comment.url, comment.commentid)}
+                    onClick={(e) => {this.handleDeleteClick(comment.url, comment.commentid, e)}}
                   >
                     Delete comment
                   </button>
@@ -195,7 +199,7 @@ class Post extends React.Component {
             <input
               type="text"
               value={newComment}
-              onChange={this.handleChange}
+              onChange={(e) => {this.handleChange(e)}}
             />
           </form>
         </div >

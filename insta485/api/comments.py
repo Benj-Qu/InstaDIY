@@ -56,7 +56,7 @@ def delete_comment(commentid):
     connection = insta485.model.get_db()
     connection.execute(
         "DELETE FROM comments WHERE commentid = ? ",
-        (commentid)
+        (commentid, )
     )
     connection.commit()
     return flask.jsonify({}), 204
