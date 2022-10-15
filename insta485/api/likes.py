@@ -1,7 +1,8 @@
 """REST API for likes."""
 import flask
 import insta485
-from insta485.api.utils import check_authorization, postid_in_range
+from insta485.api.utils import (check_authorization,
+                                get_error_code)
 from insta485.api.db_operations import (has_liked,
                                         get_likeid,
                                         own_like, likeid_exists)
@@ -10,16 +11,19 @@ from insta485.api.db_operations import (has_liked,
 @insta485.app.route('/api/v1/likes/', methods=["POST"])
 def create_like():
     """Add like using api."""
+    username, _, _ = check_authorization()
     postid = flask.request.args.get('postid')
-    username, has_error, error_code = check_authorization()
+    if get_error_code(postid):
+        return flask.jsonify({}), get_error_code(postid)
+    # username, has_error, error_code = check_authorization()
 
-    if has_error:
-        return flask.jsonify({}), error_code
+    # if has_error:
+    #     return flask.jsonify({}), error_code
 
-    if postid_in_range(postid) is False:
-        # if postid is not in range
-        # return 404
-        return flask.jsonify({}), 404
+    # if postid_in_range(postid) is False:
+    #     # if postid is not in range
+    #     # return 404
+    #     return flask.jsonify({}), 404
 
     if has_liked(username, postid):
         likeid = get_likeid(username, postid)

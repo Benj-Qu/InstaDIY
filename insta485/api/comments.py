@@ -3,23 +3,26 @@ import flask
 import insta485
 from insta485.api.db_operations import own_comment, delete_comment_db
 from insta485.api.utils import (check_authorization,
-                                postid_in_range,
-                                commentid_in_range)
+                                commentid_in_range,
+                                get_error_code)
 
 
 @insta485.app.route("/api/v1/comments/", methods=["POST"])
 def add_comment():
     """Add comment using api."""
+    username, _, _ = check_authorization()
     postid = flask.request.args.get("postid")
-    username, has_error, error_code = check_authorization()
+    if get_error_code(postid):
+        return flask.jsonify({}), get_error_code(postid)
+    # username, has_error, error_code = check_authorization()
 
-    if has_error:
-        return flask.jsonify({}), error_code
+    # if has_error:
+    #     return flask.jsonify({}), error_code
 
-    if postid_in_range(postid) is False:
-        # if postid is not in range
-        # return 404
-        return flask.jsonify({}), 404
+    # if postid_in_range(postid) is False:
+    #     # if postid is not in range
+    #     # return 404
+    #     return flask.jsonify({}), 404
 
     text = flask.request.get_json()["text"]
     connection = insta485.model.get_db()

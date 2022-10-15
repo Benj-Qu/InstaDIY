@@ -69,3 +69,16 @@ def commentid_in_range(commentid):
             (commentid, )
         )
     return len(cur.fetchall()) != 0
+
+
+def get_error_code(postid):
+    """Get error code."""
+    _, has_error, _ = check_authorization()
+
+    if has_error:
+        return 403
+
+    if postid_in_range(postid) is False:
+        return 404
+
+    return False
