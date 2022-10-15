@@ -7,7 +7,7 @@ from insta485.api.utils import check_authorization, postid_in_range
 
 @insta485.app.route('/api/v1/posts/')
 def get_posts():
-
+    """Get posts using api."""
     username, has_error, error_code = check_authorization()
     if has_error:
         return flask.jsonify({}), error_code
@@ -59,6 +59,7 @@ def get_posts():
 
 @insta485.app.route('/api/v1/posts/<int:postid_url_slug>/')
 def get_post(postid_url_slug):
+    """Get post using api."""
     username, has_error, error_code = check_authorization()
     if has_error:
         return flask.jsonify({}), error_code

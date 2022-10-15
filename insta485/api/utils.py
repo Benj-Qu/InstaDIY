@@ -1,11 +1,13 @@
+"""Utils for check authorization and check post_id in range."""
 import flask
 import insta485
 import hashlib
 
 
 def check_authorization():
+    """Check authorization."""
     # Every REST API route should return 403 if a user is not authenticated.
-    # return username, has_error (True or Flase), error_code (403)
+    # return username, has_error (True or Flase), error_code (403).
     if "username" in flask.session:
         # Authentication with session cookies should also work.
         # This is true for every route with the exception of /api/v1/
@@ -44,9 +46,10 @@ def check_authorization():
 
 
 def postid_in_range(postid):
+    """Check if postid is in range."""
     # Post IDs that are out of range should return a 404 error.
-    # return True if postid is in range
-    # return False if postid is not in range
+    # Return True if postid is in range.
+    # Return False if postid is not in range.
     connection = insta485.model.get_db()
     cur = connection.execute(
             "SELECT * FROM posts WHERE postid = ? ",
@@ -56,6 +59,7 @@ def postid_in_range(postid):
 
 
 def commentid_in_range(commentid):
+    """Check if commentid is in range."""
     # Post IDs that are out of range should return a 404 error.
     # return True if postid is in range
     # return False if postid is not in range

@@ -7,6 +7,7 @@ from insta485.api.db_operations import *
 
 @insta485.app.route('/api/v1/likes/', methods=["POST"])
 def create_like():
+    """Add like using api."""
     postid = flask.request.args.get('postid')
 
     username, has_error, error_code = check_authorization()
@@ -43,6 +44,7 @@ def create_like():
 
 @insta485.app.route('/api/v1/likes/<likeid>/', methods=["DELETE"])
 def delete_like(likeid):
+    """Delete like using api."""
     # Delete one “like”. Return 204 on success.
     # If the likeid does not exist, return 404.
     # If the user does not own the like, return 403.

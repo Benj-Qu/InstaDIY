@@ -7,6 +7,7 @@ from insta485.api.utils import *
 
 @insta485.app.route("/api/v1/comments/", methods=["POST"])
 def add_comment():
+    """Add comment using api."""
     postid = flask.request.args.get("postid")
     username, has_error, error_code = check_authorization()
 
@@ -44,6 +45,7 @@ def add_comment():
 
 @insta485.app.route("/api/v1/comments/<commentid>/", methods=["DELETE"])
 def delete_comment(commentid):
+    """Delete comment using api."""
     username, has_error, error_code = check_authorization()
     if has_error:
         # 403

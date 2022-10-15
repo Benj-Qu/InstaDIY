@@ -1,11 +1,9 @@
+"""Database operations."""
 import insta485
 
 
 def has_liked(username, postid):
-    """
-    Return True if username has already liked this postid
-    else return False
-    """
+    """Return True if username has already liked this postid."""
     connection = insta485.model.get_db()
     cur = connection.execute(
         "SELECT * "
@@ -30,10 +28,7 @@ def get_likeid(username, postid):
 
 
 def likeid_exists(likeid):
-    """
-    Return True if likeid exists
-    else return False
-    """
+    """Return True if likeid exists. Else return False."""
     connection = insta485.model.get_db()
     cur = connection.execute(
         "SELECT * "
@@ -45,10 +40,7 @@ def likeid_exists(likeid):
 
 
 def own_like(username, likeid):
-    """
-    Return True if username own the like
-    else return False
-    """
+    """Return True if username own the like. Else return False."""
     connection = insta485.model.get_db()
     cur = connection.execute(
         "SELECT * "
@@ -62,10 +54,7 @@ def own_like(username, likeid):
 
 
 def own_comment(username, commentid):
-    """
-    Return True if username own the like
-    else return False
-    """
+    """Return True if username own the like, else return False."""
     connection = insta485.model.get_db()
     cur = connection.execute(
         "SELECT * "
