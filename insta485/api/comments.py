@@ -1,7 +1,7 @@
 """REST API for comments."""
 import flask
 import insta485
-from insta485.api.db_operations import own_comment
+from insta485.api.db_operations import own_comment, delete_comment_db
 from insta485.api.utils import (check_authorization,
                                 postid_in_range,
                                 commentid_in_range)
@@ -60,10 +60,12 @@ def delete_comment(commentid):
         return flask.jsonify({}), 404
     if own_comment(username, commentid) is False:
         return flask.jsonify({}), 403
-    connection = insta485.model.get_db()
-    connection.execute(
-        "DELETE FROM comments WHERE commentid = ? ",
-        (commentid, )
-    )
-    connection.commit()
+
+    delete_comment_db(commentid)
+    # connection = insta485.model.get_db()
+    # connection.execute(
+    #     "DELETE FROM comments WHERE commentid = ? ",
+    #     (commentid, )
+    # )
+    # connection.commit()
     return flask.jsonify({}), 204

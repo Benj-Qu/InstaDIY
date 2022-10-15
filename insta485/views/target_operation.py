@@ -10,7 +10,8 @@ URLs include:
 import flask
 import insta485
 from insta485.views.users import is_following
-
+from insta485.api.db_operations import (has_liked, get_likeid,
+                                        delete_comment_db)
 
 # def is_following(username1, username2):
 #     """If is following."""
@@ -28,31 +29,31 @@ from insta485.views.users import is_following
 #     return len(cur.fetchall()) != 0
 
 
-def has_liked(username, postid):
-    """If has liked."""
-    # Return True if username has already liked this postid
-    # else return False
-    connection = insta485.model.get_db()
-    cur = connection.execute(
-        "SELECT * "
-        "FROM likes "
-        "WHERE owner = ? AND postid = ?",
-        (username, postid)
-    )
-    return len(cur.fetchall()) != 0
+# def has_liked(username, postid):
+#     """If has liked."""
+#     # Return True if username has already liked this postid
+#     # else return False
+#     connection = insta485.model.get_db()
+#     cur = connection.execute(
+#         "SELECT * "
+#         "FROM likes "
+#         "WHERE owner = ? AND postid = ?",
+#         (username, postid)
+#     )
+#     return len(cur.fetchall()) != 0
 
 
-def get_likeid(username, postid):
-    """Get likeid."""
-    connection = insta485.model.get_db()
-    cur = connection.execute(
-        "SELECT likeid "
-        "FROM likes "
-        "WHERE owner = ? AND postid = ?",
-        (username, postid, )
-    )
-    results = cur.fetchone()
-    return results["likeid"]
+# def get_likeid(username, postid):
+#     """Get likeid."""
+#     connection = insta485.model.get_db()
+#     cur = connection.execute(
+#         "SELECT likeid "
+#         "FROM likes "
+#         "WHERE owner = ? AND postid = ?",
+#         (username, postid, )
+#     )
+#     results = cur.fetchone()
+#     return results["likeid"]
 
 
 def find_comment_owner(commentid):
@@ -149,12 +150,13 @@ def op_delete():
     logname = flask.session["username"]
     if logname != find_comment_owner(commentid):
         flask.abort(403)
-    connection = insta485.model.get_db()
-    connection.execute(
-        "DELETE FROM comments WHERE commentid = ? ",
-        (commentid, )
-    )
-    connection.commit()
+    delete_comment_db(commentid)
+    # connection = insta485.model.get_db()
+    # connection.execute(
+    #     "DELETE FROM comments WHERE commentid = ? ",
+    #     (commentid, )
+    # )
+    # connection.commit()
 
 
 @insta485.app.route('/following/', methods=["POST"])

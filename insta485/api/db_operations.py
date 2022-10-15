@@ -65,3 +65,13 @@ def own_comment(username, commentid):
     results = cur.fetchone()
     owner = results["owner"]
     return owner == username
+
+
+def delete_comment_db(commentid):
+    """Delete a comment by commentid."""
+    connection = insta485.model.get_db()
+    connection.execute(
+        "DELETE FROM comments WHERE commentid = ? ",
+        (commentid, )
+    )
+    connection.commit()

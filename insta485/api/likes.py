@@ -11,8 +11,8 @@ from insta485.api.db_operations import (has_liked,
 def create_like():
     """Add like using api."""
     postid = flask.request.args.get('postid')
-
     username, has_error, error_code = check_authorization()
+
     if has_error:
         return flask.jsonify({}), error_code
 
