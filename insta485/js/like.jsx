@@ -9,12 +9,11 @@ class Like extends React.Component {
     super(props);
     this.state = {
       has_liked: false,
-      num_likes: 0
+      num_likes: 0,
     };
   }
 
   componentDidMount() {
-
     // This line automatically assigns this.props.url to the const variable url
     const { likes } = this.props;
     // console.log(likes);
@@ -23,8 +22,8 @@ class Like extends React.Component {
     // Call REST API to get the post's information
     this.setState({
       has_liked: likes.hasLiked,
-      num_likes: likes.numLikes
-    })
+      num_likes: likes.numLikes,
+    });
   }
 
   handleClick() {
@@ -32,8 +31,8 @@ class Like extends React.Component {
     const { likes } = this.props;
     this.setState({
       has_liked: likes.hasLiked,
-      num_likes: likes.numLikes
-    })
+      num_likes: likes.numLikes,
+    });
 
     if (likes.hasLiked === false) {
       this.state.has_liked = true;
@@ -45,7 +44,6 @@ class Like extends React.Component {
           return response.json();
         })
         .catch((error) => console.log(error));
-
     }
     if (likes.hasLiked === true) {
       this.state.has_liked = false;
@@ -69,7 +67,7 @@ class Like extends React.Component {
       <div>
         <div>
           <button
-            type='button'
+            type="button"
             className="like-unlike-button"
             onClick={() => this.handleClick()}
           >
@@ -77,9 +75,7 @@ class Like extends React.Component {
           </button>
         </div>
         <div>
-          {likes.numLikes}
-          {" "}
-          {likes.numLikes === 1 ? "like" : "likes"}
+          {likes.numLikes} {likes.numLikes === 1 ? "like" : "likes"}
         </div>
       </div>
     );
@@ -93,7 +89,7 @@ Like.propTypes = {
   likes: PropTypes.objectOf(
     PropTypes.bool.isRequired,
     PropTypes.number.isRequired,
-    PropTypes.string.isRequired,
+    PropTypes.string.isRequired
   ).isRequired,
 };
 

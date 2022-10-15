@@ -22,7 +22,6 @@ class Post extends React.Component {
     };
   }
 
-
   componentDidMount() {
     const { url } = this.props;
     fetch(url, { credentials: "same-origin" })
@@ -31,7 +30,7 @@ class Post extends React.Component {
         return response.json();
       })
       .then((data) => {
-        console.log(data)
+        console.log(data);
         this.setState({
           comments: data.comments,
           commentsUrl: data.comments_url,
@@ -54,17 +53,17 @@ class Post extends React.Component {
 
   handleDeleteClick(url, id) {
     const { comments } = this.state;
-    console.log(url)
+    console.log(url);
     fetch(url, { credentials: "same-origin", method: "DELETE" })
       .then((response) => {
-        console.log("11111")
+        console.log("11111");
         if (!response.ok) throw Error(response.statusText);
-        console.log("success")
+        console.log("success");
         // return response.json();
       })
       .then(() => {
         this.setState({
-          comments: comments.filter(c => c.commentid !== id)
+          comments: comments.filter((c) => c.commentid !== id),
         });
       })
       .catch((error) => console.log(error));
@@ -74,69 +73,75 @@ class Post extends React.Component {
     this.setState({ newComment: event.target.value });
   }
 
-
   handleSubmit(event, commentsUrl) {
     event.preventDefault();
     const { newComment } = this.state;
     fetch(commentsUrl, {
       credentials: "same-origin",
       method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({text: newComment})
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: newComment }),
     })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
       .then((data) => {
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
           newComment: "",
-          comments: prevState.comments.concat(data)
+          comments: prevState.comments.concat(data),
         }));
       })
       .catch((error) => console.log(error));
   }
 
   likeClick(likeOnly) {
-    const { lognameLikesThis, likesUrl, postid } = this.state
+    const { lognameLikesThis, likesUrl, postid } = this.state;
 
     if (lognameLikesThis === false) {
-      const likePostUrl = `/api/v1/likes/?postid=${postid}`
+      const likePostUrl = `/api/v1/likes/?postid=${postid}`;
       fetch(likePostUrl, { credentials: "same-origin", method: "POST" })
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
           return response.json();
         })
         .then((data) => {
-          this.setState(prevState => ({
+          this.setState((prevState) => ({
             lognameLikesThis: true,
             numLikes: prevState.numLikes + 1,
-            likesUrl: data.url
-          }))
+            likesUrl: data.url,
+          }));
         })
         .catch((error) => console.log(error));
-    }
-    else if (!likeOnly) {
+    } else if (!likeOnly) {
       fetch(likesUrl, { credentials: "same-origin", method: "DELETE" })
         .then((response) => {
           if (!response.ok) throw Error(response.statusText);
           return response.json();
         })
         .catch((error) => console.log(error));
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         lognameLikesThis: false,
         numLikes: prevState.numLikes - 1,
-        likesUrl: null
-      }))
+        likesUrl: null,
+      }));
     }
   }
 
-
-
   render() {
-    const { comments, commentsUrl, created, imgUrl,
-      lognameLikesThis, numLikes, owner, ownerImgUrl, ownerShowUrl,
-      postShowUrl, newComment } = this.state;
+    const {
+      comments,
+      commentsUrl,
+      created,
+      imgUrl,
+      lognameLikesThis,
+      numLikes,
+      owner,
+      ownerImgUrl,
+      ownerShowUrl,
+      postShowUrl,
+      newComment,
+    } = this.state;
     const { timestamp } = moment(created).fromNow();
     return (
       <div>
@@ -150,12 +155,16 @@ class Post extends React.Component {
           <a href={postShowUrl}>{timestamp}</a>
         </div>
         <div>
-          <img src={imgUrl} alt={imgUrl} onDoubleClick={() => this.likeClick(true)} />
+          <img
+            src={imgUrl}
+            alt={imgUrl}
+            onDoubleClick={() => this.likeClick(true)}
+          />
         </div>
         <div>
           <div>
             <button
-              type='button'
+              type="button"
               className="like-unlike-button"
               onClick={() => this.likeClick(false)}
             >
@@ -167,43 +176,43 @@ class Post extends React.Component {
             {numLikes === 1 ? " like" : " likes"}
           </div>
         </div>
-        {
-          comments.map((comment) => (
+        {comments.map((comment) => (
+          <div>
             <div>
-              <div>
-                <a href={comment.ownerShowUrl}>
-                  {comment.owner}
-                </a>
-                {comment.text}
-              </div>
-              <div>
-                {comment.lognameOwnsThis
-                  ?
-                  <button
-                    type="button"
-                    className="delete-comment-button"
-                    onClick={(e) => {this.handleDeleteClick(comment.url, comment.commentid, e)}}
-                  >
-                    Delete comment
-                  </button>
-                  :
-                  null}
-              </div>
+              <a href={comment.ownerShowUrl}>{comment.owner}</a>
+              {comment.text}
             </div>
-          ))
-        }
+            <div>
+              {comment.lognameOwnsThis ? (
+                <button
+                  type="button"
+                  className="delete-comment-button"
+                  onClick={(e) => {
+                    this.handleDeleteClick(comment.url, comment.commentid, e);
+                  }}
+                >
+                  Delete comment
+                </button>
+              ) : null}
+            </div>
+          </div>
+        ))}
         <div>
           <form
             className="comment-form"
-            onSubmit={(e) => { this.handleSubmit(e, commentsUrl) }}
+            onSubmit={(e) => {
+              this.handleSubmit(e, commentsUrl);
+            }}
           >
             <input
               type="text"
               value={newComment}
-              onChange={(e) => {this.handleChange(e)}}
+              onChange={(e) => {
+                this.handleChange(e);
+              }}
             />
           </form>
-        </div >
+        </div>
       </div>
     );
   }
