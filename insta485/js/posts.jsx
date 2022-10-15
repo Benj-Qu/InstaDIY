@@ -58,9 +58,10 @@ class Posts extends React.Component {
             <b>Yay! You have seen it all</b>
           </p>
         }
+        history="replace"
       >
         {results.map((post) => (
-          <Post key={post.id} url={post.url} />
+          <Post key={post.postid} url={post.url} />
         ))}
       </InfiniteScroll>
     );

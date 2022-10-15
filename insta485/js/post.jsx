@@ -176,27 +176,29 @@ class Post extends React.Component {
             {numLikes === 1 ? " like" : " likes"}
           </div>
         </div>
-        {comments.map((comment) => (
-          <div>
-            <div>
-              <a href={comment.ownerShowUrl}>{comment.owner}</a>
-              {comment.text}
-            </div>
-            <div>
-              {comment.lognameOwnsThis ? (
-                <button
-                  type="button"
-                  className="delete-comment-button"
-                  onClick={(e) => {
-                    this.handleDeleteClick(comment.url, comment.commentid, e);
-                  }}
-                >
-                  Delete comment
-                </button>
-              ) : null}
-            </div>
-          </div>
-        ))}
+        <ul>
+          {comments.map((comment) => (
+            <li key={comment.commentid}>
+              <div>
+                <a href={comment.ownerShowUrl}>{comment.owner}</a>
+                {comment.text}
+              </div>
+              <div>
+                {comment.lognameOwnsThis ? (
+                  <button
+                    type="button"
+                    className="delete-comment-button"
+                    onClick={(e) => {
+                      this.handleDeleteClick(comment.url, comment.commentid, e);
+                    }}
+                  >
+                    Delete comment
+                  </button>
+                ) : null}
+              </div>
+            </li>
+          ))}
+        </ul>
         <div>
           <form
             className="comment-form"
