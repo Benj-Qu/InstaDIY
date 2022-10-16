@@ -1,0 +1,24 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 54.167.49.108:80...
+* Connected to 54.167.49.108 (54.167.49.108) port 80 (#0)
+> GET /static/js/bundle.js HTTP/1.1
+> Host: 54.167.49.108
+> User-Agent: curl/7.79.1
+> Accept: */*
+> Cookie: login=eyJ1c2VybmFtZSI6ImF3ZGVvcmlvIn0.Y0tpQw.UC4lkElM_lgzax3bwquIDMI3EKc
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Server: nginx/1.18.0 (Ubuntu)
+< Date: Sun, 16 Oct 2022 02:18:36 GMT
+< Content-Type: text/javascript; charset=utf-8
+< Content-Length: 1145585
+< Connection: keep-alive
+< Content-Disposition: inline; filename=bundle.js
+< Last-Modified: Sun, 16 Oct 2022 02:12:37 GMT
+< Cache-Control: no-cache
+< 
+{ [6938 bytes data]
+100 1118k  100 1118k    0     0  2707k      0 --:--:-- --:--:-- --:--:-- 2748k
+* Connection #0 to host 54.167.49.108 left intact

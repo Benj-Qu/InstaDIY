@@ -1,0 +1,22 @@
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying 54.167.49.108:80...
+* Connected to 54.167.49.108 (54.167.49.108) port 80 (#0)
+> GET / HTTP/1.1
+> Host: 54.167.49.108
+> User-Agent: curl/7.79.1
+> Accept: */*
+> Cookie: login=eyJ1c2VybmFtZSI6ImF3ZGVvcmlvIn0.Y0tpQw.UC4lkElM_lgzax3bwquIDMI3EKc
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Server: nginx/1.18.0 (Ubuntu)
+< Date: Sun, 16 Oct 2022 02:16:52 GMT
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 5560
+< Connection: keep-alive
+< Vary: Cookie
+< 
+{ [5560 bytes data]
+100  5560  100  5560    0     0  53476      0 --:--:-- --:--:-- --:--:-- 56161
+* Connection #0 to host 54.167.49.108 left intact
